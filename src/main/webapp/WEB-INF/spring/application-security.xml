@@ -1,0 +1,45 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+		 xmlns:b="http://www.springframework.org/schema/beans"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		 http://www.springframework.org/schema/security 
+		 http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+	<http >
+		<remember-me
+                token-validity-seconds="60"
+                remember-me-parameter="forget-me"
+                data-source-ref="dataSource"/>
+	    <csrf disabled="true"/>
+	    <access-denied-handler error-page="/accessDenied"/>
+	    <intercept-url pattern="/user/**" access="hasRole('ROLE_USER')"/>
+	    <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+	    <form-login
+	        login-page="/login"
+	        default-target-url="/user"
+	        authentication-failure-url="/login?error=true"
+					username-parameter="user_login" 
+					password-parameter="password_login"/>
+            <!--authentication-success-handler-ref="savedRequestAwareAuthenticationSuccessHandler"/>-->
+        <logout logout-success-url="/login"/>
+	</http>
+    <b:bean id="jdbcGroupsImpl" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+        <b:property name="enableGroups" value="true"/>
+        <b:property name="enableAuthorities" value="false"/>
+        <b:property name="dataSource" ref="dataSource"/>
+    </b:bean>
+	<authentication-manager>
+		<authentication-provider user-service-ref="jdbcGroupsImpl">
+            <password-encoder ref="bcrypt"/>
+            <!--<jdbc-user-service data-source-ref="dataSource"/>-->
+			<!--<user-service >-->
+				<!--<user name="user" password="user" authorities="ROLE_USER" />-->
+				<!--<user name="admin" password="admin" authorities="ROLE_ADMIN" />-->
+			<!--</user-service>-->
+		</authentication-provider>
+	</authentication-manager>
+    <b:bean id="bcrypt" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <b:constructor-arg name="strength" value="11" />
+    </b:bean>
+</b:beans>

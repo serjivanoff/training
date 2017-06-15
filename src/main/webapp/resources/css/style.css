@@ -1,0 +1,23 @@
+#form{
+	border: 12px solid #323232;
+	font-size: 24px;
+	color: lime;
+	padding: 5px;
+}
+#table1{
+	border: 2px solid #323232;
+	font-size: 29px;
+	color: lime;
+	padding: 5px;
+}
+.forget-me{
+    padding: 11px 16px;
+    margin-left: 12px;
+    margin-top:10px;
+    color: greenyellow;
+}
+.checkAdmin {
+    padding: 11px 16px;
+    margin-left: 12px;
+    margin-top:10px;
+}
